@@ -46,22 +46,22 @@ function validateStatus(status) {
 
   // Aliases
   const aliases = {
-    // Spanish → English
-    'evaluada': 'Evaluated', 'condicional': 'Evaluated', 'hold': 'Evaluated', 'evaluar': 'Evaluated', 'verificar': 'Evaluated',
-    'aplicado': 'Applied', 'enviada': 'Applied', 'aplicada': 'Applied', 'applied': 'Applied', 'sent': 'Applied',
-    'respondido': 'Responded',
-    'entrevista': 'Interview',
-    'oferta': 'Offer',
-    'rechazado': 'Rejected', 'rechazada': 'Rejected',
-    'descartado': 'Discarded', 'descartada': 'Discarded', 'cerrada': 'Discarded', 'cancelada': 'Discarded',
-    'no aplicar': 'SKIP', 'no_aplicar': 'SKIP', 'skip': 'SKIP', 'monitor': 'SKIP',
+    // English aliases
+    'reviewed': 'Evaluated', 'conditional': 'Evaluated', 'hold': 'Evaluated', 'review': 'Evaluated', 'verify': 'Evaluated',
+    'submitted': 'Applied', 'sent': 'Applied',
+    'replied': 'Responded',
+    'interviewing': 'Interview',
+    'offered': 'Offer',
+    'declined': 'Rejected',
+    'closed': 'Discarded', 'canceled': 'Discarded',
+    'do not apply': 'SKIP', 'do_not_apply': 'SKIP', 'skip': 'SKIP', 'monitor': 'SKIP',
     'geo blocker': 'SKIP',
   };
 
   if (aliases[lower]) return aliases[lower];
 
-  // DUPLICADO/Repost → Discarded
-  if (/^(duplicado|dup|repost)/i.test(lower)) return 'Discarded';
+  // DUPLICATE/Repost → Discarded
+  if (/^(duplicate|dup|repost)/i.test(lower)) return 'Discarded';
 
   console.warn(`⚠️  Non-canonical status "${status}" → defaulting to "Evaluated"`);
   return 'Evaluated';
@@ -144,8 +144,9 @@ function parseTsvContent(content, filename) {
     const col5 = parts[5].trim();
     const col4LooksLikeScore = /^\d+\.?\d*\/5$/.test(col4) || col4 === 'N/A' || col4 === 'DUP';
     const col5LooksLikeScore = /^\d+\.?\d*\/5$/.test(col5) || col5 === 'N/A' || col5 === 'DUP';
-    const col4LooksLikeStatus = /^(evaluated|applied|responded|interview|offer|rejected|discarded|skip|evaluada|aplicado|respondido|entrevista|oferta|rechazado|descartado|no aplicar|cerrada|duplicado|repost|condicional|hold|monitor)/i.test(col4);
-    const col5LooksLikeStatus = /^(evaluated|applied|responded|interview|offer|rejected|discarded|skip|evaluada|aplicado|respondido|entrevista|oferta|rechazado|descartado|no aplicar|cerrada|duplicado|repost|condicional|hold|monitor)/i.test(col5);
+    const statusPattern = /^(evaluated|applied|responded|interview|offer|rejected|discarded|skip|reviewed|submitted|replied|interviewing|offered|declined|closed|canceled|do not apply|do_not_apply|duplicate|repost|conditional|hold|monitor)/i;
+    const col4LooksLikeStatus = statusPattern.test(col4);
+    const col5LooksLikeStatus = statusPattern.test(col5);
 
     let statusCol, scoreCol;
     if (col4LooksLikeStatus && !col4LooksLikeScore) {

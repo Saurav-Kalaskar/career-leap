@@ -1,94 +1,56 @@
-# Режим: apply — Ассистент отклика в реальном времени
+# Mode: apply - Live Application Assistant
 
-Интерактивный режим для заполнения формы отклика в Chrome. Читает экран, загружает контекст вакансии, генерирует персонализированные ответы.
+Interactive mode for filling job application forms in real time.
 
-## Требования
+## Requirements
 
-- **Лучше с Playwright**: Кандидат видит браузер, Claude взаимодействует со страницей.
-- **Без Playwright**: Кандидат делится скриншотом или вставляет вопросы вручную.
+- Best with visible Playwright session.
+- Without Playwright, user can share screenshots or paste questions.
 
 ## Workflow
 
-```
-1. ОПРЕДЕЛИТЬ   → Прочитать активную вкладку Chrome (скриншот/URL/заголовок)
-2. РАСПОЗНАТЬ   → Извлечь компанию + роль со страницы
-3. НАЙТИ        → Совпадение с существующими отчётами в reports/
-4. ЗАГРУЗИТЬ    → Прочитать полный отчёт + секцию G (если есть)
-5. СРАВНИТЬ     → Роль на экране совпадает с оценённой? Если изменилась → предупредить
-6. АНАЛИЗ       → Определить ВСЕ видимые вопросы формы
-7. ГЕНЕРАЦИЯ    → Для каждого вопроса — персонализированный ответ
-8. ПОКАЗАТЬ     → Отформатированные ответы для copy-paste
-```
+1. Detect the active job page.
+2. Identify company and role.
+3. Look up an existing report in `reports/`.
+4. Load report context (including Section G if present).
+5. Detect role mismatch and warn/adapt.
+6. Extract all visible form questions.
+7. Generate tailored answers.
+8. Present copy-paste-ready outputs.
 
-## Шаг 1 — Определить вакансию
+## Form Question Types
 
-**С Playwright:** Snapshot активной страницы. Прочитать заголовок, URL, видимое содержимое.
+- Free text fields (cover letter, motivation, etc.)
+- Dropdowns (authorization, referral source, etc.)
+- Yes/No fields (relocation, visa, etc.)
+- Salary fields
+- Upload fields (resume, cover letter)
 
-**Без Playwright:** Попросить кандидата:
-- Поделиться скриншотом формы
-- Или вставить вопросы как текст
-- Или назвать компанию + роль
+## Answering Rules
 
-## Шаг 2 — Найти контекст
+- Use report evidence first (proof points + STAR stories).
+- Reuse Section G draft answers when available.
+- Keep the "I'm choosing you" tone: confident, specific, concise.
+- Reference concrete role/company details from the job post.
+- Avoid generic fluff.
 
-1. Извлечь название компании и должность
-2. Искать в `reports/` по названию компании (Grep, case-insensitive)
-3. Если есть совпадение → загрузить полный отчёт
-4. Если есть секция G → загрузить черновики как базу
-5. Если НЕТ совпадения → предупредить и предложить запустить auto-pipeline
+## Output Format
 
-## Шаг 3 — Обнаружить изменения
+```markdown
+## Answers for [Company] - [Role]
 
-Если роль на экране отличается от оценённой:
-- **Предупредить кандидата**: "Роль изменилась с [X] на [Y]. Переоценить или адаптировать ответы?"
-- Обновить трекер при необходимости
+Based on: Report #NNN | Score: X.X/5 | Archetype: [type]
 
-## Шаг 4 — Анализировать вопросы формы
+### 1. [Exact form question]
+> [Answer]
 
-Определить ВСЕ видимые вопросы:
-- Поля свободного текста (сопроводительное, "почему эта роль" и т.д.)
-- Выпадающие списки (откуда узнали, разрешение на работу и т.д.)
-- Да/Нет (переезд, виза и т.д.)
-- Поля зарплаты (диапазон, ожидания)
-- Поля загрузки (резюме, сопроводительное PDF)
-
-## Шаг 5 — Генерировать ответы
-
-Для каждого вопроса:
-
-1. **Контекст отчёта**: Proof points из блока B, истории STAR из блока F
-2. **Секция G**: Если есть черновик — использовать как базу и улучшить
-3. **Тон "Я выбираю вас"**: Кандидат имеет варианты и выбирает эту компанию по конкретным причинам
-4. **Конкретика**: Ссылка на что-то конкретное из видимого JD
-5. **Язык ответов**: На языке JD. Для русскоязычных вакансий — на русском.
-
-**Формат вывода:**
-
-```
-## Ответы для [Компания] — [Роль]
-
-На основе: Отчёт #NNN | Балл: X.X/5 | Архетип: [тип]
-
----
-
-### 1. [Точный вопрос из формы]
-> [Ответ, готовый для copy-paste]
-
-### 2. [Следующий вопрос]
-> [Ответ]
-
-...
-
----
-
-Заметки:
-- [Наблюдения о роли, изменениях и т.д.]
-- [Предложения по персонализации для проверки кандидатом]
+### 2. [Next question]
+> [Answer]
 ```
 
-## Шаг 6 — После отклика (опционально)
+## Post-Apply
 
-Если кандидат подтвердил отправку:
-1. Обновить статус в `data/applications.md` с "Evaluated" на "Applied"
-2. Обновить секцию G отчёта финальными ответами
-3. Предложить: `/career-ops contacto` для LinkedIn outreach
+If user confirms submission:
+1. Update `data/applications.md` status from `Evaluated` to `Applied`.
+2. Save final form answers into report Section H/G as appropriate.
+3. Suggest next step: `/career-ops contact` for LinkedIn outreach.

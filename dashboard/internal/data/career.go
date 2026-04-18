@@ -470,29 +470,29 @@ func NormalizeStatus(raw string) string {
 	// Strip markdown bold and trailing dates
 	s := strings.ReplaceAll(raw, "**", "")
 	s = strings.TrimSpace(strings.ToLower(s))
-	// Strip trailing date (e.g., "aplicado 2026-03-12")
+	// Strip trailing date (e.g., "applied 2026-03-12")
 	if idx := strings.Index(s, " 202"); idx > 0 {
 		s = strings.TrimSpace(s[:idx])
 	}
 
 	switch {
-	// Most restrictive first — accepts both English and Spanish
-	case strings.Contains(s, "no aplicar") || strings.Contains(s, "no_aplicar") || s == "skip" || strings.Contains(s, "geo blocker"):
+	// Most restrictive first
+	case strings.Contains(s, "do not apply") || strings.Contains(s, "do_not_apply") || s == "skip" || strings.Contains(s, "geo blocker"):
 		return "skip"
-	case strings.Contains(s, "interview") || strings.Contains(s, "entrevista"):
+	case strings.Contains(s, "interview") || strings.Contains(s, "interviewing"):
 		return "interview"
-	case s == "offer" || strings.Contains(s, "oferta"):
+	case s == "offer" || strings.Contains(s, "offered"):
 		return "offer"
-	case strings.Contains(s, "responded") || strings.Contains(s, "respondido"):
+	case strings.Contains(s, "responded") || strings.Contains(s, "replied"):
 		return "responded"
-	case strings.Contains(s, "applied") || strings.Contains(s, "aplicado") || s == "enviada" || s == "aplicada" || s == "sent":
+	case strings.Contains(s, "applied") || strings.Contains(s, "submitted") || s == "sent":
 		return "applied"
-	case strings.Contains(s, "rejected") || strings.Contains(s, "rechazado") || s == "rechazada":
+	case strings.Contains(s, "rejected") || strings.Contains(s, "declined"):
 		return "rejected"
-	case strings.Contains(s, "discarded") || strings.Contains(s, "descartado") || s == "descartada" || s == "cerrada" || s == "cancelada" ||
-		strings.HasPrefix(s, "duplicado") || strings.HasPrefix(s, "dup"):
+	case strings.Contains(s, "discarded") || strings.Contains(s, "closed") || strings.Contains(s, "canceled") ||
+		strings.HasPrefix(s, "duplicate") || strings.HasPrefix(s, "dup"):
 		return "discarded"
-	case strings.Contains(s, "evaluated") || strings.Contains(s, "evaluada") || s == "condicional" || s == "hold" || s == "monitor" || s == "evaluar" || s == "verificar":
+	case strings.Contains(s, "evaluated") || strings.Contains(s, "reviewed") || s == "conditional" || s == "hold" || s == "monitor" || s == "review" || s == "verify":
 		return "evaluated"
 	default:
 		return s

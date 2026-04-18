@@ -17,7 +17,7 @@ There are two layers. Read `DATA_CONTRACT.md` for the full list.
 - `data/*`, `reports/*`, `output/*`, `interview-prep/*`
 
 **System Layer (auto-updatable, DON'T put user data here):**
-- `modes/_shared.md`, `modes/oferta.md`, all other modes
+- `modes/_shared.md`, `modes/offer.md`, all other modes
 - `CLAUDE.md`, `*.mjs` scripts, `dashboard/*`, `templates/*`, `batch/*`
 
 **THE RULE: When the user asks to customize anything (archetypes, narrative, negotiation scripts, proof points, location policy, comp targets), ALWAYS write to `modes/_profile.md` or `config/profile.yml`. NEVER edit `modes/_shared.md` for user-specific content.** This ensures system updates don't overwrite their customizations.
@@ -74,9 +74,9 @@ When using [OpenCode](https://opencode.ai), the following slash commands are ava
 |---------|------------------------|-------------|
 | `/career-ops` | `/career-ops` | Show menu or evaluate JD with args |
 | `/career-ops-pipeline` | `/career-ops pipeline` | Process pending URLs from inbox |
-| `/career-ops-evaluate` | `/career-ops oferta` | Evaluate job offer (A-F scoring) |
-| `/career-ops-compare` | `/career-ops ofertas` | Compare and rank multiple offers |
-| `/career-ops-contact` | `/career-ops contacto` | LinkedIn outreach (find contacts + draft) |
+| `/career-ops-evaluate` | `/career-ops offer` | Evaluate job offer (A-F scoring) |
+| `/career-ops-compare` | `/career-ops offers` | Compare and rank multiple offers |
+| `/career-ops-contact` | `/career-ops contact` | LinkedIn outreach (find contacts + draft) |
 | `/career-ops-deep` | `/career-ops deep` | Deep company research |
 | `/career-ops-pdf` | `/career-ops pdf` | Generate ATS-optimized CV |
 | `/career-ops-training` | `/career-ops training` | Evaluate course/cert against goals |
@@ -190,9 +190,9 @@ This system is designed to be customized by YOU (AI Agent). When the user asks y
 
 Default modes are in `modes/` (English). Additional language-specific modes are available:
 
-- **German (DACH market):** `modes/de/` — native German translations with DACH-specific vocabulary (13. Monatsgehalt, Probezeit, Kündigungsfrist, AGG, Tarifvertrag, etc.). Includes `_shared.md`, `angebot.md` (evaluation), `bewerben.md` (apply), `pipeline.md`.
-- **French (Francophone market):** `modes/fr/` — native French translations with France/Belgium/Switzerland/Luxembourg-specific vocabulary (CDI/CDD, convention collective SYNTEC, RTT, mutuelle, prévoyance, 13e mois, intéressement/participation, titres-restaurant, CSE, portage salarial, etc.). Includes `_shared.md`, `offre.md` (evaluation), `postuler.md` (apply), `pipeline.md`.
-- **Japanese (Japan market):** `modes/ja/` — native Japanese translations with Japan-specific vocabulary (正社員, 業務委託, 賞与, 退職金, みなし残業, 年俸制, 36協定, 通勤手当, 住宅手当, etc.). Includes `_shared.md`, `kyujin.md` (evaluation), `oubo.md` (apply), `pipeline.md`.
+- **German (DACH market):** `modes/de/` — market-specific translation pack with terms such as 13th-month salary, probation period, notice period, anti-discrimination law, and collective labor agreements. Includes `_shared.md`, `offer.md` (evaluation), `apply.md` (apply), `pipeline.md`.
+- **French (Francophone market):** `modes/fr/` — market-specific translation pack with terms such as permanent/fixed-term contracts, collective agreements, RTT days, employer health coverage, retirement/savings benefits, meal vouchers, and employee committees. Includes `_shared.md`, `offer.md` (evaluation), `apply.md` (apply), `pipeline.md`.
+- **Japanese (Japan market):** `modes/ja/` — market-specific translation pack with terms such as permanent employment, contractor arrangements, bonus structures, severance, fixed overtime, annual salary structures, labor-hour agreements, commuting allowance, and housing allowance. Includes `_shared.md`, `offer.md` (evaluation), `apply.md` (apply), `pipeline.md`.
 
 **When to use German modes:** If the user is targeting German-language job postings, lives in DACH, or asks for German output. Either:
 1. User says "use German modes" → read from `modes/de/` instead of `modes/`
@@ -216,9 +216,9 @@ Default modes are in `modes/` (English). Additional language-specific modes are 
 | If the user... | Mode |
 |----------------|------|
 | Pastes JD or URL | auto-pipeline (evaluate + report + PDF + tracker) |
-| Asks to evaluate offer | `oferta` |
-| Asks to compare offers | `ofertas` |
-| Wants LinkedIn outreach | `contacto` |
+| Asks to evaluate offer | `offer` |
+| Asks to compare offers | `offers` |
+| Wants LinkedIn outreach | `contact` |
 | Asks for company research | `deep` |
 | Preps for interview at specific company | `interview-prep` |
 | Wants to generate CV/PDF | `pdf` |
@@ -313,7 +313,7 @@ Write one TSV file per evaluation to `batch/tracker-additions/{num}-{company-slu
 
 1. **NEVER edit applications.md to ADD new entries** -- Write TSV in `batch/tracker-additions/` and `merge-tracker.mjs` handles the merge.
 2. **YES you can edit applications.md to UPDATE status/notes of existing entries.**
-3. All reports MUST include `**URL:**` in the header (between Score and PDF). Include `**Legitimacy:** {tier}` (see Block G in `modes/oferta.md`).
+3. All reports MUST include `**URL:**` in the header (between Score and PDF). Include `**Legitimacy:** {tier}` (see Block G in `modes/offer.md`).
 4. All statuses MUST be canonical (see `templates/states.yml`).
 5. Health check: `node verify-pipeline.mjs`
 6. Normalize statuses: `node normalize-statuses.mjs`

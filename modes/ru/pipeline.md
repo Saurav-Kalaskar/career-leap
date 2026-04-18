@@ -1,58 +1,41 @@
-# Режим: pipeline — Очередь URL (Second Brain)
+# Mode: pipeline - URL Inbox (Second Brain)
 
-Обрабатывает URL вакансий из `data/pipeline.md`. Пользователь добавляет URL когда угодно, затем запускает `/career-ops pipeline` для обработки.
+Process accumulated job URLs from `data/pipeline.md`.
 
 ## Workflow
 
-1. **Прочитать** `data/pipeline.md` → найти `- [ ]` в секции "Ожидающие" (или "Pendientes" / "Pending" — pipeline.md может содержать заголовки на любом языке)
-2. **Для каждого URL**:
-   a. Вычислить следующий `REPORT_NUM` (прочитать `reports/`, взять макс + 1)
-   b. **Извлечь JD** через Playwright → WebFetch → WebSearch
-   c. Если URL недоступен → пометить `- [!]` с заметкой, продолжить
-   d. **Выполнить auto-pipeline**: Оценка A-F → Отчёт .md → PDF (если балл >= 3.0) → Трекер
-   e. **Переместить из "Ожидающие" в "Обработанные"**: `- [x] #NNN | URL | Компания | Роль | Балл/5 | PDF ✅/❌`
-3. **Если 3+ URL**, запустить агентов параллельно (Agent tool с `run_in_background`). **Ограничение:** Playwright требует ресурсов — использовать **только один** Playwright-агент одновременно (правило `_shared.md`). Все прочие шаги (WebFetch, оценка, генерация отчёта) допускают полную параллелизацию. Рекомендуемая схема: один агент с Playwright верифицирует активность вакансии; остальные агенты получают JD через WebFetch и параллельно проводят оценку.
-4. **По завершении** показать таблицу:
+1. Read unchecked `- [ ]` entries in the `Pending` section.
+2. For each pending URL:
+   a. Compute next report number from `reports/`.
+   b. Extract JD (Playwright -> WebFetch -> WebSearch fallback).
+   c. If inaccessible, mark `- [!]` with reason and continue.
+   d. Run full auto-pipeline: evaluation -> report -> PDF (if score >= 3.0) -> tracker update.
+   e. Move item to `Processed` as `- [x] #NNN | URL | Company | Role | Score/5 | PDF ✅/❌`.
+3. If 3+ items pending, parallelize with agents.
+4. Show final summary table.
 
-```
-| # | Компания | Роль | Балл | PDF | Рекомендуемое действие |
-```
-
-## Формат pipeline.md
+## Format
 
 ```markdown
-## Ожидающие
-- [ ] https://jobs.example.com/posting/123
-- [ ] https://hh.ru/vacancy/12345678 | Компания | Senior Backend
-- [!] https://private.url/job — Ошибка: требуется авторизация
+## Pending
+- [ ] https://...
 
-## Обработанные
-- [x] #143 | https://jobs.example.com/posting/789 | Acme Corp | AI PM | 4.2/5 | PDF ✅
-- [x] #144 | https://hh.ru/vacancy/87654321 | BigCo | Backend | 2.1/5 | PDF ❌
+## Processed
+- [x] #143 | https://... | Company | Role | 4.2/5 | PDF ✅
 ```
 
-## Определение JD из URL
+## URL Handling
 
-1. **Playwright (предпочтительно):** `browser_navigate` + `browser_snapshot`. Работает со всеми SPA.
-2. **WebFetch (fallback):** Для статических страниц.
-3. **WebSearch (последний ресурс):** Поиск на вторичных порталах.
+- LinkedIn may require login -> mark `[!]` and request pasted JD.
+- PDF URL -> read directly.
+- `local:` prefix -> read local file path.
 
-**Особые случаи:**
-- **hh.ru**: API доступен: `https://api.hh.ru/vacancies/{id}` — JSON с полным описанием
-- **LinkedIn**: Может требовать логин → пометить `[!]`, попросить вставить текст
-- **PDF**: Если URL на PDF — прочитать через Read tool
-- **`local:` префикс**: Читать локальный файл. Пример: `local:jds/company-role.md`
+## Preflight
 
-## Нумерация
+Run:
 
-1. Список файлов в `reports/`
-2. Извлечь номер из префикса
-3. Новый номер = максимум + 1
-
-## Синхронизация источников
-
-Перед обработкой URL:
 ```bash
 node cv-sync-check.mjs
 ```
-Если рассинхронизация — предупредить пользователя.
+
+If sync fails, warn before continuing.

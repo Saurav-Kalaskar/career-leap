@@ -39,14 +39,14 @@ const CANONICAL_STATUSES = [
 ];
 
 const ALIASES = {
-  'evaluada': 'evaluated', 'condicional': 'evaluated', 'hold': 'evaluated', 'evaluar': 'evaluated', 'verificar': 'evaluated',
-  'aplicado': 'applied', 'enviada': 'applied', 'aplicada': 'applied', 'applied': 'applied', 'sent': 'applied',
-  'respondido': 'responded',
-  'entrevista': 'interview',
-  'oferta': 'offer',
-  'rechazado': 'rejected', 'rechazada': 'rejected',
-  'descartado': 'discarded', 'descartada': 'discarded', 'cerrada': 'discarded', 'cancelada': 'discarded',
-  'no aplicar': 'skip', 'no_aplicar': 'skip', 'monitor': 'skip', 'geo blocker': 'skip',
+  'reviewed': 'evaluated', 'conditional': 'evaluated', 'hold': 'evaluated', 'review': 'evaluated', 'verify': 'evaluated',
+  'submitted': 'applied', 'applied': 'applied', 'sent': 'applied',
+  'replied': 'responded',
+  'interviewing': 'interview',
+  'offered': 'offer',
+  'declined': 'rejected',
+  'closed': 'discarded', 'canceled': 'discarded',
+  'do not apply': 'skip', 'do_not_apply': 'skip', 'monitor': 'skip', 'geo blocker': 'skip',
 };
 
 let errors = 0;
@@ -152,7 +152,7 @@ if (badScores === 0) ok('All scores valid');
 let badRows = 0;
 for (const line of lines) {
   if (!line.startsWith('|')) continue;
-  if (line.includes('---') || line.includes('Empresa')) continue;
+  if (line.includes('---') || line.includes('Company')) continue;
   const parts = line.split('|');
   if (parts.length < 9) {
     error(`Row with <9 columns: ${line.substring(0, 80)}...`);

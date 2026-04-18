@@ -1,30 +1,30 @@
-# Modo: project — Evaluación de Proyecto Portfolio
+# Mode: project - Portfolio Project Evaluation
 
-Scoring 6 dimensiones (1-5):
+Score each candidate project across 6 dimensions (1-5):
 
-| Dimensión | Peso | 5 = ... | 1 = ... |
-|-----------|------|---------|---------|
-| Señal para roles target | 25% | Directamente demuestra skill del JD | No relacionado |
-| Unicidad | 20% | Nadie ha hecho esto | Todo el mundo lo tiene |
-| Demo-ability | 20% | Live demo en 2 min | Solo código, no visual |
-| Potencial de métricas | 15% | Métricas claras (latency, cost, accuracy) | Sin métricas posibles |
-| Tiempo a MVP | 10% | 1 semana | 3+ meses |
-| Potencial de historia STAR | 10% | Historia rica con trade-offs | Solo implementación |
+| Dimension | Weight | 5 = ... | 1 = ... |
+|----------|--------|---------|---------|
+| Signal for target roles | 25% | Directly proves target skill | Unrelated |
+| Uniqueness | 20% | Distinctive | Commodity |
+| Demo-ability | 20% | 2-minute live demo possible | Code-only/no clear demo |
+| Metric potential | 15% | Clear measurable outcomes | No measurable outcomes |
+| Time to MVP | 10% | <=1 week | 3+ months |
+| STAR potential | 10% | Rich trade-off story | Implementation only |
 
-## Requisitos de "Interview Pack"
+## Interview Pack Requirements
 
-Para cada proyecto aprobado:
-1. **One-pager**: producto + arquitectura + métricas + plan de evaluación
-2. **Demo**: URL live o walkthrough grabado de 2 min
-3. **Postmortem**: qué funcionó, qué no, mitigaciones
+For approved projects:
+1. One-pager: product, architecture, metrics, evaluation plan.
+2. Demo: live URL or 2-minute walkthrough.
+3. Postmortem: what worked, what failed, and mitigations.
 
-## Plan 80/20
+## 80/20 Plan
 
-- Semana 1 → MVP con métrica core
-- Semana 2 → polish + interview pack
+- Week 1: MVP + core metric.
+- Week 2: polish + interview pack.
 
-## Veredictos
+## Verdicts
 
-- **CONSTRUIR** → plan con milestones semanales
-- **SKIP** → por qué y qué hacer en su lugar
-- **PIVOTAR A [alternativa]** → variante más impactante
+- `BUILD`
+- `SKIP`
+- `PIVOT TO [alternative]`
