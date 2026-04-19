@@ -3,7 +3,7 @@ name: career-ops
 description: AI job search command center -- evaluate offers, generate CVs, scan portals, track applications
 user_invocable: true
 args: mode
-argument-hint: "[scan | deep | pdf | offer | offers | apply | batch | tracker | pipeline | contact | training | project | interview-prep | update]"
+argument-hint: "[scan | deep | pdf | latex-pdf | offer | offers | apply | batch | tracker | pipeline | contact | training | project | followup | interview-prep | update]"
 ---
 
 # career-ops -- Router
@@ -30,6 +30,7 @@ Determine the mode from `{{mode}}`:
 | `batch` | `batch` |
 | `patterns` | `patterns` |
 | `followup` | `followup` |
+| `latex-pdf` | `latex-pdf` |
 
 **Auto-pipeline detection:** If `{{mode}}` is not a known sub-command AND contains JD text (keywords: "responsibilities", "requirements", "qualifications", "about the role", "we're looking for", company name + role) or a URL to a JD, execute `auto-pipeline`.
 
@@ -52,6 +53,7 @@ Available commands:
   /career-ops contact  → LinkedIn power move: find contacts + draft message
   /career-ops deep      → Deep research prompt about company
   /career-ops pdf       → PDF only, ATS-optimized CV
+  /career-ops latex-pdf → LaTeX‑based PDF, auto‑extracts company, bolds JD keywords
   /career-ops training  → Evaluate course/cert against North Star
   /career-ops project   → Evaluate portfolio project idea
   /career-ops tracker   → Application status overview

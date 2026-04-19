@@ -20,6 +20,7 @@
 14. Write HTML to `/tmp/cv-{candidate}-{company}.html`
 15. Run:
    `node generate-pdf.mjs /tmp/cv-{candidate}-{company}.html output/cv-{candidate}-{company}-{YYYY-MM-DD}.pdf --format={letter|a4}`
+   `node generate-latex-pdf.mjs --jd <text|url> --output output/Saurav_Kalaskar_Resume_{Company}.pdf`
 16. Report output path, page count, and keyword coverage
 
 ## ATS parsing rules
